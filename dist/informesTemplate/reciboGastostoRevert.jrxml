@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboGastos" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="c72d7581-20bb-48e6-8630-e3ef5a17e47c">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ubicacionPago" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["La Rioja 33 - 5to piso- oficina 7 Córdoba"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="consorcio_id" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["3"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="codigo_id" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT uni_codigo,conc_nombre,detliq_periodoConcepto,detliq_saldo,uni_codigo,conc_codigo,detliq_codigo,detliq_periodo as detliq_periodo1,(SELECT MAX(liq_nro_liquidacion) FROM liquidacion WHERE liq_uni_codigo=uni_codigo AND liq_codigo = (SELECT MAX(liq_codigo) FROM liquidacion WHERE liq_uni_codigo=uni_codigo) ) as liq_nro_liquidacion,con_denominacion,uni_descripcion,inq_nombre,prop_nombre,now()
+FROM detalle_liquidacion
+INNER JOIN liquidacion ON liq_codigo=detliq_liq_codigo
+INNER JOIN concepto ON conc_codigo=detliq_conc_codigo
+INNER JOIN unidad ON liq_uni_codigo=uni_codigo
+INNER JOIN consorcio ON uni_con_codigo=con_codigo
+LEFT JOIN inquilino ON uni_inq_codigo=inq_codigo
+INNER JOIN propietario ON uni_prop_codigo=prop_codigo
+WHERE detliq_saldo>0
+AND conc_nombre!='Expensas'
+AND uni_con_codigo=$P{consorcio_id}
+AND uni_codigo=(case $P{codigo_id} when 0 then uni_codigo else $P{codigo_id} end)]]>
+	</queryString>
+	<field name="uni_codigo" class="java.lang.Long"/>
+	<field name="conc_nombre" class="java.lang.String"/>
+	<field name="detliq_periodoConcepto" class="java.sql.Date"/>
+	<field name="detliq_saldo" class="java.math.BigDecimal"/>
+	<field name="conc_codigo" class="java.lang.Long"/>
+	<field name="detliq_codigo" class="java.lang.Long"/>
+	<field name="detliq_periodo1" class="java.sql.Date"/>
+	<field name="liq_nro_liquidacion" class="java.math.BigDecimal"/>
+	<field name="con_denominacion" class="java.lang.String"/>
+	<field name="uni_descripcion" class="java.lang.String"/>
+	<field name="inq_nombre" class="java.lang.String"/>
+	<field name="prop_nombre" class="java.lang.String"/>
+	<field name="now()" class="java.sql.Timestamp"/>
+	<sortField name="uni_codigo"/>
+	<variable name="SUM_detliq_saldo_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{detliq_saldo}]]></variableExpression>
+	</variable>
+	<variable name="detalleTotal" class="java.math.BigDecimal">
+		<initialValueExpression><![CDATA[new BigDecimal(0d)]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_detliq_saldo_2" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{detliq_saldo}]]></variableExpression>
+	</variable>
+	<group name="codigo_unidad" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{liq_nro_liquidacion}]]></groupExpression>
+		<groupHeader>
+			<band height="30" splitType="Stretch">
+				<rectangle radius="0">
+					<reportElement key="element-99" mode="Opaque" x="0" y="13" width="534" height="17" forecolor="#000000" backcolor="#999999" uuid="a439b924-9837-4054-a8a1-86777e610806"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement key="element-97" x="240" y="13" width="178" height="16" forecolor="#FFFFFF" uuid="45e5654d-e1c4-453e-a35b-692dd45823f7"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="" size="12"/>
+					</textElement>
+					<text><![CDATA[Período]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="element-100" x="0" y="13" width="230" height="16" forecolor="#FFFFFF" uuid="f11d9ea1-9db0-4bf6-b099-cb24038f2bcd"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="" size="12"/>
+					</textElement>
+					<text><![CDATA[Concepto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="element-102" x="420" y="13" width="104" height="16" forecolor="#FFFFFF" uuid="3baf5ed4-b750-4d0f-b000-02dc682fe126"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="" size="12"/>
+					</textElement>
+					<text><![CDATA[Importes]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="56" splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="5" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="175" splitType="Stretch">
+			<line>
+				<reportElement key="line-1" x="0" y="5" width="544" height="1" forecolor="#000000" uuid="ff44d806-0d64-4cff-b83e-5cfb2ba8629c"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-2" positionType="FixRelativeToBottom" x="0" y="55" width="544" height="1" forecolor="#000000" uuid="a2fc3b5b-5df3-4d99-bbd0-40011bb9c424"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="3" y="10" width="519" height="40" uuid="b206af7c-5ca7-433c-b793-09d5733a1ea3"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="28" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{con_denominacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-4" x="0" y="65" width="50" height="20" uuid="c6d7cff7-d0aa-4984-8ba7-af826d7e23e6"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Local:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="50" y="65" width="370" height="20" uuid="2ecd8732-ed55-4bfa-920a-f4880346b4b4"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uni_descripcion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-5" x="1" y="95" width="110" height="20" uuid="111bf3b8-6924-47ab-acc7-7b269d22b9ca"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Liquidacion Nro:]]></text>
+			</staticText>
+			<textField pattern="0" isBlankWhenNull="false">
+				<reportElement key="textField" x="113" y="95" width="310" height="20" uuid="dce491ff-602e-4973-b932-4b23c62ccdee"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{liq_nro_liquidacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-6" x="1" y="115" width="110" height="20" uuid="4001ef8b-2273-4d69-b1b7-11ef4251194c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Emisión:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField" x="113" y="115" width="140" height="20" uuid="af7e5f94-cc6d-49ec-8c2f-b71395d812e4"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{now()}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-7" x="1" y="135" width="80" height="20" uuid="198b0655-dd2c-4a9e-abdf-2ceb1b9e74d2"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Propietario:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="83" y="135" width="340" height="20" uuid="36277aef-917b-4ff2-9088-fe482d534274"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="SansSerif" size="15" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prop_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="155" width="69" height="20" uuid="a0bad38c-bfea-465e-a7d6-5bf4f5a68bfa"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Inquilino:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="63" y="155" width="360" height="20" uuid="29715c15-fecf-4ebd-ac15-d300206679ca"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{inq_nombre}==null ? "" :$F{inq_nombre})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-3" positionType="FixRelativeToBottom" x="0" y="90" width="545" height="1" forecolor="#000000" uuid="4ecc57e7-f44b-4543-a56b-72afae4647a8"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Prevent">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-8" x="1" y="4" width="230" height="15" uuid="f0135486-e16d-4c03-ba61-13c15e5355e4"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Times-Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{conc_nombre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="MM/yyyy" isBlankWhenNull="true">
+				<reportElement key="textField-9" x="240" y="3" width="178" height="15" uuid="b9bc3264-e957-42e5-9a50-8592f2efc7f8"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="Times-Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detliq_periodoConcepto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-10" x="420" y="4" width="104" height="15" uuid="2ef09f2c-0ad1-4a13-8cac-42be8857e100"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Times-Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detliq_saldo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="157" splitType="Stretch">
+			<line>
+				<reportElement key="line" positionType="FixRelativeToBottom" x="0" y="1" width="535" height="1" forecolor="#808080" uuid="9fe95cc4-bef2-44b3-a731-cff119cf9472"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField evaluationTime="Band" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="70" y="51" width="420" height="20" uuid="c8c9785c-0170-49cc-a396-3fa2630baef3"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new n2t((int)$V{SUM_detliq_saldo_2}.doubleValue()).convertirLetras((int)$V{SUM_detliq_saldo_2}.doubleValue()) + " con " + ((int)(($V{SUM_detliq_saldo_2}.doubleValue()-(int)$V{SUM_detliq_saldo_2}.doubleValue())*100)) + "/00 centavos.-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="0" y="19" width="100" height="20" uuid="a799c2fd-3c4e-4f4e-9883-521b3278494a"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Total Adeudado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="0" y="51" width="70" height="20" uuid="793dc2d8-123a-42a1-b895-6c6e39bfecac"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Son Pesos:]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-4" x="100" y="33" width="330" height="1" uuid="589e45a1-9895-423e-877e-5d63593a0c00"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement key="staticText-9" stretchType="RelativeToBandHeight" x="0" y="76" width="520" height="20" uuid="5079b54f-0d46-48bd-8765-daca949375ae"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[Esta liquidación deberá ser abonada en el local de la administración, ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="96" width="520" height="20" uuid="4a0cb4e5-61bc-4bba-b948-6f153faba535"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ubicacionPago}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-10" x="0" y="117" width="520" height="20" uuid="b1ca7f0d-ceab-4286-b517-506aea1ee655"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[hasta el quinto día posterior al de su fecha de emisión.-]]></text>
+			</staticText>
+			<textField pattern="##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" x="430" y="18" width="100" height="20" uuid="002a8467-20b0-4628-97d4-7bbcd2b93efb"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SUM_detliq_saldo_2}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="227" splitType="Stretch">
+			<line>
+				<reportElement key="line" x="0" y="-148" width="535" height="1" forecolor="#000000" uuid="ca938851-39fe-401c-9214-643b4658c18d"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
