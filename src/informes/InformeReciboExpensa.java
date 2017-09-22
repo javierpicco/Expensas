@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.engine.*;
 
 /**
  *
@@ -31,9 +32,9 @@ public class InformeReciboExpensa {
     private Map parameters=new HashMap();
 
     public void displayReport(){
-        JasperPrint jasperPrint;
+        
         JasperViewer jasperViewer;
-        jasperPrint = generateReport();
+        JasperPrint jasperPrint = generateReport();
         jasperViewer = new JasperViewer(jasperPrint,false);
         //jasperViewer.setAlwaysOnTop(true);
         jasperViewer.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
@@ -49,8 +50,8 @@ public class InformeReciboExpensa {
         {
             this.getParameters().put("SUBREPORT_DIR",System.getProperty("user.dir")+"/informesTemplate/");
             //this.getParameters().put("consorcio_id","5");
-            jasperPrint = JasperFillManager.fillReport(        
-            System.getProperty("user.dir")+"/informesTemplate/reciboExpensa.jasper", this.getParameters(),
+            JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.dir") + "/informesTemplate/reciboExpensa.jrxml");
+            jasperPrint = JasperFillManager.fillReport( jasperReport, this.getParameters(),
             ConnectionSing.getConection());
         }
         catch (JRException e)

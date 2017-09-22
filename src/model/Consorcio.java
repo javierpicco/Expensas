@@ -162,20 +162,21 @@ public class Consorcio {
         while (i.hasNext()){
             Double valor=new Double(0d);
             GastoImputado gas=(GastoImputado)i.next();
-            if(gas.getConcepto().getCoeficiente().isDistribuible()==true){
-                String concepto;
+            String concepto = null;
+            if(gas.getConcepto().getCoeficiente().isDistribuible()==true){  
                 if (gas.getConcepto().isDescripcion()==true){
                     concepto=gas.getDescripcion();
                 }
                 else{
                     concepto=gas.getConcepto().getNombre();
                 }
-                try {
+                
+            }
+            try {
                                  
-                    ild.guardarConceptos(gas.getPeriodo(),concepto,nf.parse(nf.format(gas.getImporte())).doubleValue(),gas.getConsorcio().getCodigo(),gas.getComprobante());
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
-                }
+                 ild.guardarConceptos(gas.getPeriodo(),concepto,nf.parse(nf.format(gas.getImporte())).doubleValue(),gas.getConsorcio().getCodigo(),gas.getComprobante());
+            } catch (ParseException ex) {
+                ex.printStackTrace();
             }
         }
     }

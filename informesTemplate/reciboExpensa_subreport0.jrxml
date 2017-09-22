@@ -1,171 +1,132 @@
-<?xml version="1.0" encoding="UTF-8"  ?>
-<!-- Created with iReport - A designer for JasperReports -->
-<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-<jasperReport
-		 name="classic"
-		 columnCount="1"
-		 printOrder="Vertical"
-		 orientation="Portrait"
-		 pageWidth="535"
-		 pageHeight="802"
-		 columnWidth="535"
-		 columnSpacing="0"
-		 leftMargin="0"
-		 rightMargin="0"
-		 topMargin="0"
-		 bottomMargin="0"
-		 whenNoDataType="NoPages"
-		 isTitleNewPage="false"
-		 isSummaryNewPage="false">
-	<property name="ireport.scriptlethandling" value="0" />
-	<property name="ireport.encoding" value="UTF-8" />
-	<import value="java.util.*" />
-	<import value="net.sf.jasperreports.engine.*" />
-	<import value="net.sf.jasperreports.engine.data.*" />
-
-	<parameter name="codigo_unidad" isForPrompting="false" class="java.lang.Long"/>
-	<queryString><![CDATA[SELECT conc_nombre,detliq_periodoConcepto,detliq_saldo
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="classic" pageWidth="535" pageHeight="802" whenNoDataType="NoPages" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f50b6a1f-a63f-4bf3-8cc4-6ff0a78d3a45">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="codigo_unidad" class="java.lang.Long" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT conc_nombre,detliq_periodoConcepto,detliq_saldo
 FROM detalle_liquidacion
 INNER JOIN liquidacion ON liq_codigo=detliq_liq_codigo
 INNER JOIN concepto ON conc_codigo=detliq_conc_codigo
 INNER JOIN unidad ON liq_uni_codigo=uni_codigo
-INNER JOIN coeficientexunidad ON coeuni_uni_codigo=uni_codigo
-INNER JOIN coeficiente ON coeuni_coe_codigo=coe_codigo
+LEFT JOIN coeficientexunidad ON coeuni_uni_codigo=uni_codigo
+LEFT JOIN coeficiente ON coeuni_coe_codigo=coe_codigo
 INNER JOIN propietario ON uni_prop_codigo=prop_codigo
 LEFT JOIN inquilino ON uni_inq_codigo=inq_codigo
 INNER JOIN consorcio ON con_codigo=uni_con_codigo
 WHERE detliq_saldo>0
 AND conc_nombre!='Expensas'
 AND uni_codigo=$P{codigo_unidad}
-ORDER BY detliq_periodo DESC]]></queryString>
-
+ORDER BY detliq_periodo DESC]]>
+	</queryString>
 	<field name="conc_nombre" class="java.lang.String"/>
 	<field name="detliq_periodoConcepto" class="java.sql.Date"/>
 	<field name="detliq_saldo" class="java.math.BigDecimal"/>
-
-		<background>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</background>
-		<title>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</title>
-		<pageHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageHeader>
-		<columnHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnHeader>
-		<detail>
-			<band height="69"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="127"
-						y="2"
-						width="398"
-						height="17"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{conc_nombre}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="0"
-						y="2"
-						width="178"
-						height="17"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="staticText"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="69" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="127" y="2" width="398" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="39733d3b-f75d-487f-bdc4-15d42a525553"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{conc_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" positionType="Float" x="0" y="2" width="178" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="f0ad487a-e0ef-445f-9db1-6ade5da10234"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[conc_nombre]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="127"
-						y="21"
-						width="398"
-						height="17"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.util.Date"><![CDATA[$F{detliq_periodoConcepto}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="0"
-						y="21"
-						width="178"
-						height="17"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="staticText"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="127" y="21" width="398" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="5fefe49f-3b0b-42c5-a86f-1794d2889d72"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detliq_periodoConcepto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" positionType="Float" x="0" y="21" width="178" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="6290e55b-f145-4d13-acd4-b32ba49f9baf"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[detliq_periodoConcepto]]></text>
-				</staticText>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="127"
-						y="40"
-						width="398"
-						height="17"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{detliq_saldo}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement
-						x="0"
-						y="40"
-						width="178"
-						height="17"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="staticText"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font size="12"/>
-					</textElement>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="127" y="40" width="398" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="de0fe982-4002-4022-a30c-f584865479ac"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detliq_saldo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText" positionType="Float" x="0" y="40" width="178" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="c0d9d8f9-8f09-4ccb-9c0a-36fea77f3f9d"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="12"/>
+				</textElement>
 				<text><![CDATA[detliq_saldo]]></text>
-				</staticText>
-			</band>
-		</detail>
-		<columnFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnFooter>
-		<pageFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageFooter>
-		<summary>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</summary>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
 </jasperReport>
