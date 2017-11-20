@@ -14,8 +14,10 @@ import java.awt.Dialog;
 import java.util.HashMap;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -48,9 +50,15 @@ public class InformeLiquidacion {
         try
         {
             this.getParameters().put("SUBREPORT_DIR",System.getProperty("user.dir")+"/informesTemplate/");
-            jasperPrint = JasperFillManager.fillReport(        
-            System.getProperty("user.dir")+"/informesTemplate/liquidacionConsorcio.jasper", this.getParameters(),
+            //this.getParameters().put("consorcio_id","5");
+            JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.dir") + "/informesTemplate/liquidacionConsorcio.jrxml");
+            jasperPrint = JasperFillManager.fillReport( jasperReport, this.getParameters(),
             ConnectionSing.getConection());
+            //this.getParameters().put("SUBREPORT_DIR",System.getProperty("user.dir")+"/informesTemplate/");
+            //jasperPrint = JasperFillManager.fillReport(        
+            //System.getProperty("user.dir")+"/informesTemplate/liquidacionConsorcio2.jasper", this.getParameters(),
+            //ConnectionSing.getConection());
+            
         }
         catch (JRException e)
         {
